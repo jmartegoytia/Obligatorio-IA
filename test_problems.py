@@ -2,8 +2,28 @@
 
 Test functions for benchmarking optimization techniques.
 """
-from math import sin
+
+from math import sin, cos, pi, sqrt, inf
 from problem import OptimizationProblem
+
+def _bohachevsky_ (elem):
+    (x,y) = elem
+    return x*x + 2*y*y-0.3*cos( (3*pi*x) + (4*pi*y)) + 0.3
+
+def bohachevsky ():
+    return OptimizationProblem(
+        domains = ((-100,100),) * 2, objective = _bohachevsky_)
+
+def _schwefel_ (elem):        
+    sum = 0
+    for i in elem:    
+        sum = sum + i*sin(sqrt(abs(i)))
+    return (418.9829 * len(elem)) - sum
+    
+def schwefel  (d):
+    return OptimizationProblem(
+        domains = ((-500,500),) * d,
+        objective = _schwefel_)
 
 def hello_world(target_str="Hello world!"):
     target_chars = tuple(map(ord, target_str))
