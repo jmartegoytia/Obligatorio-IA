@@ -2,7 +2,7 @@
 
 Test functions for benchmarking optimization techniques.
 """
-
+import random
 from math import sin, cos, pi, sqrt, inf
 from problem import OptimizationProblem
 
@@ -24,28 +24,34 @@ def schwefel  (d):
     return OptimizationProblem(
         domains = ((-500,500),) * d,
         objective = _schwefel_)
-
+        
+            
 def traveling_salesman_problem (grafo):
     return OptimizationProblem(
-        domains = ((0, len(grafo.matriz)) * len(grafo.matriz),),
+        domains = [],
         objective = _traveling_salesman_problem_(grafo))
 
-def _traveling_salesman_problem_ (grafo):
-    maxValorArista = 0
-    cantNone = 0
-    suma = 0
-    for i in grafo.matriz:
-        for j in i:
-            if (j is not None and j > maxValorArista):
-                maxValorArista = j
-        cantNone += len(list(filter(None, i)))
 
-    for i in grafo.matriz:
-        for j in i:
-            if (j != None):        # No existe arista que una a los nodos
-                suma += j
+def _traveling_salesman_problem_ (grafo):
+    def problem_function(elem):
+        maxValorArista = -inf
+        cantNone = 0
+        suma = 0
+        for i in grafo.matriz:
+            for j in i:
+                if (j is not None and j > maxValorArista):
+                    maxValorArista = j
+        for i in range(0, len(elem) - 1):
+            if grafo.matriz[elem[i]][elem[i + 1]] is None:
+                cantNone += 1
             else:
-                suma += maxValorArista * 2 * cantNone
+                suma += grafo.matriz[elem[i]][elem[i + 1]]
+        if cantNone:
+            return cantNone * (maxValorArista + 1) * len(grafo.matriz)
+        else:
+            return suma
+    return problem_function
+        
 
 
 def hello_world(target_str="Hello world!"):

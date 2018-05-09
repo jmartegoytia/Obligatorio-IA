@@ -16,10 +16,9 @@ def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100, surroundin
         currentCandidate = problem.randomElement()
     else:
         currentCandidate = randomFuction()
-
     best = problem.objective(currentCandidate)
     currentCandidate = (currentCandidate, best)
-
+    bestCandidate = currentCandidate
     while(i < iterations):      
         nexts = problem.evaluated(surroundings_function(currentCandidate[0], 1, problem.domains))
         nexts = list(filter(lambda x : x[0] not in tabu_list, nexts))
@@ -34,4 +33,4 @@ def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100, surroundin
             if (len(tabu_list) > max_size_tabu_list):
                 tabu_list.pop(0)
         i += 1
-    return bestCandidate, best
+    return bestCandidate

@@ -16,7 +16,7 @@ class Ant():
         self.local_pheromone_function = local_pheromone_function
         self.pheromones = pheromones
         self.iterations = max_iterations
-        self.surroundings = surroundings
+        self.surroundings = surroundings_function
     def solve(self):
         next = (self.position, self.problem.evaluate(self.position))
         path = [next[0]]
@@ -67,7 +67,7 @@ def ant_colony_optimization(problem, iterations=10, ants_amount=10,
                 position = problem.randomElement()
             else:
                 position = randomFunction()
-            ant = Ant(position, problem, local_pheromone_function, pheromones, ant_iterations, surroundings_function)
+            ant = Ant(position, problem, local_pheromone_function, pheromones, ant_iterations, surroundings_function=surroundings_function)
             ants.append(ant)
             i += 1
         for ant in ants:
@@ -84,7 +84,7 @@ def ant_colony_optimization(problem, iterations=10, ants_amount=10,
         for solution in solutions:
             value = solution[1]
             for node in solution[0]:
-                pheromones[node] = pheromones.get(node, 0) + global_pheromone_update(value)         
+                pheromones[tuple(node)] = pheromones.get(tuple(node), 0) + global_pheromone_update(value)         
         j += 1
     return best_combination, best_solution           
 
