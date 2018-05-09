@@ -10,16 +10,17 @@ def surroundings(center, radius, domains):
                if center[i] + d >= domains[i][0] and center[i] + d <= domains[i][1]
 ]
 class Ant():
-    def __init__(self, position, problem, local_pheromone_function, pheromones, max_iterations=100):
+    def __init__(self, position, problem, local_pheromone_function, pheromones, max_iterations=100, surroundings_function=surroundings):
         self.position = position
         self.problem = problem
         self.local_pheromone_function = local_pheromone_function
         self.pheromones = pheromones
         self.iterations = max_iterations
+        self.surroundings = surroundings
     def solve(self):
         next = (self.position, self.problem.evaluate(self.position))
         path = [next[0]]
-        evaluations = self.problem.evaluated(surroundings(next[0], 1, self.problem.domains))
+        evaluations = self.problem.evaluated(self.surroundings(next[0], 1, self.problem.domains))
         best_neighbour = evaluations[0]
         iterations = 0
         while self.problem.compareEvaluations(best_neighbour[1], next[1]) <= 0 and not iterations > self.iterations:
@@ -42,7 +43,7 @@ class Ant():
             elem = keys[int(d[0])]
             path.append(elem)
             next = (elem, self.problem.evaluate(elem))
-            evaluations = self.problem.evaluated(surroundings(next[0], 1, self.problem.domains))
+            evaluations = self.problem.evaluated(self.surroundings(next[0], 1, self.problem.domains))
             best_neighbour = evaluations[0]
             iterations += 1
         return path, next[1]
@@ -52,7 +53,7 @@ global_pheromone_update = lambda value: 100000 / (value if value else 1)
 def ant_colony_optimization(problem, iterations=10, ants_amount=10,
     global_pheromone_update=global_pheromone_update,
     local_pheromone_function=local_pheromone, pheromene_evaporation = 0.20,
-    ant_iterations=100):
+    ant_iterations=100, surroundings_function=surroundings, randomFunction=None):
     j = 0
     pheromones = {}
     best_solution = None
@@ -62,8 +63,11 @@ def ant_colony_optimization(problem, iterations=10, ants_amount=10,
     while j < iterations:
         i = 0
         while i < ants_amount:
-            position = problem.randomElement()
-            ant = Ant(position, problem, local_pheromone_function, pheromones)
+            if not randomFunction:
+                position = problem.randomElement()
+            else:
+                position = randomFunction()
+            ant = Ant(position, problem, local_pheromone_function, pheromones, ant_iterations, surroundings_function)
             ants.append(ant)
             i += 1
         for ant in ants:

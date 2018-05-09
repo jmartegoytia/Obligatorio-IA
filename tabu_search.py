@@ -7,20 +7,21 @@ def surroundings(center, radius, domains):
                if center[i] + d >= domains[i][0] and center[i] + d <= domains[i][1]
 ]
 
-def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100):
+def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100, surroundings_function=surroundings, randomFuction=None):
     best = None
     bestCandidate = None
     tabu_list = []
     i = 0
-
-    currentCandidate = problem.randomElement()
-    print(currentCandidate)
+    if not randomFuction:
+        currentCandidate = problem.randomElement()
+    else:
+        currentCandidate = randomFuction()
 
     best = problem.objective(currentCandidate)
     currentCandidate = (currentCandidate, best)
 
     while(i < iterations):      
-        nexts = problem.evaluated(surroundings(currentCandidate[0], 1, problem.domains))
+        nexts = problem.evaluated(surroundings_function(currentCandidate[0], 1, problem.domains))
         nexts = list(filter(lambda x : x[0] not in tabu_list, nexts))
         if (nexts):        
             currentCandidate = nexts[0]

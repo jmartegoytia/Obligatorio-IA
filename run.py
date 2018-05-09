@@ -1,5 +1,4 @@
 from tabu_search import tabu_search
-from hill_climbing import hill_climbing
 from ant_colony_optimization import ant_colony_optimization
 def test(problem=None):
     if not problem:
