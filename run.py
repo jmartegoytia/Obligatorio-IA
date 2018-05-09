@@ -47,3 +47,51 @@ def test2(problem=None):
     print(ant_colony_optimization(problem))
 
 test2()
+
+def simulate(times=10000):
+    #Problem bochachevsky
+    import test_problems
+    wins_tabu = 0
+    wins_ant = 0
+    draw = 0
+    problem = test_problems.bohachevsky()
+    for i in range(0, times):
+        r_ant = ant_colony_optimization(problem)
+        r_tabu = tabu_search(problem)
+        if r_tabu[1] > r_ant[1]:
+            wins_ant += 1
+        elif r_tabu[1] == r_ant[1]:
+            draw += 1
+        else:
+            wins_tabu += 1
+    print("Bochachevsky Tabu %d Ant %d Draw %d" % (wins_tabu, wins_ant, draw))
+    wins_tabu = 0
+    wins_ant = 0
+    draw = 0
+    problem = test_problems.schwefel(2)
+    for i in range(0, times):
+        r_ant = ant_colony_optimization(problem)
+        r_tabu = tabu_search(problem)
+        if r_tabu[1] > r_ant[1]:
+            wins_ant += 1
+        elif r_tabu[1] == r_ant[1]:
+            draw += 1
+        else:
+            wins_tabu += 1
+    print("Scwefel Tabu %d Ant %d Draw %d" % (wins_tabu, wins_ant, draw))
+    wins_tabu = 0
+    wins_ant = 0
+    draw = 0
+    problem = test_problems.traveling_salesman_problem(grafo)
+    for i in range(0, times):
+        r_ant = ant_colony_optimization(problem, surroundings_function=salesman_surroundings, randomFunction=salesman_random(grafo))
+        r_tabu = tabu_search(problem, surroundings_function=salesman_surroundings, randomFuction=salesman_random(grafo))
+        if r_tabu[1] > r_ant[1]:
+            wins_ant += 1
+        elif r_tabu[1] == r_ant[1]:
+            draw += 1
+        else:
+            wins_tabu += 1
+    print("Traveling salesman Tabu %d Ant %d Draw %d" % (wins_tabu, wins_ant, draw))
+
+simulate(10000)
