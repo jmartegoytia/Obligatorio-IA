@@ -14,6 +14,8 @@ def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100):
     i = 0
 
     currentCandidate = problem.randomElement()
+    print(currentCandidate)
+
     best = problem.objective(currentCandidate)
     currentCandidate = (currentCandidate, best)
 
@@ -22,13 +24,13 @@ def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100):
         nexts = list(filter(lambda x : x[0] not in tabu_list, nexts))
         if (nexts):        
             currentCandidate = nexts[0]
+            tabu_list.append(bestCandidate)
+
             if  (problem.compareEvaluations(best, currentCandidate[1]) > 0):
                 best = currentCandidate[1]
-                bestCandidate = currentCandidate
-                tabu_list.append(bestCandidate)
+                bestCandidate = currentCandidate                
 
             if (len(tabu_list) > max_size_tabu_list):
                 tabu_list.pop(0)
-
         i += 1
     return bestCandidate, best
