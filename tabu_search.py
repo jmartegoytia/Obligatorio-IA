@@ -8,6 +8,8 @@ def surroundings(center, radius, domains):
 ]
 
 def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100, surroundings_function=surroundings, randomFuction=None):
+    problem.restartCantEvaluations()
+    
     best = None
     bestCandidate = None
     tabu_list = []

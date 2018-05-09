@@ -5,6 +5,7 @@ from math import inf
 class OptimizationProblem:
     """ Representation of an optimization problem.
     """
+    cantEvaluations = 0
 
     def __init__(self, domains, objective, target=-inf, randgen=None):
        """ An optimization problem is defined by:
@@ -29,6 +30,7 @@ class OptimizationProblem:
         return tuple(randgen.randint(*self.domains[i]) for i in range(len(self.domains)))
 
     def evaluate(self, element):
+        self.cantEvaluations += 1
         return self.objective(element)
     
     def evaluated(self, elements, sorted=True):
@@ -55,3 +57,6 @@ class OptimizationProblem:
             eval1 = abs(eval1 - self.target)
             eval2 = abs(eval2 - self.target)
             return (eval1 > eval2) - (eval1 < eval2)
+
+    def restartCantEvaluations(self):
+        self.cantEvaluations = 0

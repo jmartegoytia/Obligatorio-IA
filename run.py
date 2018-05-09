@@ -30,24 +30,6 @@ None
 
 grafo = Grafo([[1,None,None,1],[None,1,None,None],[1,None,1,1],[None,None,1,1]])
 
-def test(problem=None):
-    if not problem:
-        import test_problems
-        problem = test_problems.traveling_salesman_problem(grafo)
-   # print(list(hill_climbing(problem, steps=1000)))
-    print(ant_colony_optimization(problem,surroundings_function=salesman_surroundings, randomFunction=salesman_random(grafo)))
-
-test()
-
-def test2(problem=None):
-    if not problem:
-        import test_problems
-        problem = test_problems.bohachevsky()
-   # print(list(hill_climbing(problem, steps=1000)))
-    print(ant_colony_optimization(problem))
-
-test2()
-
 def simulate(times=10000):
     #Problem bochachevsky
     import test_problems
@@ -55,23 +37,55 @@ def simulate(times=10000):
     wins_ant = 0
     draw = 0
     problem = test_problems.bohachevsky()
+
+    eval_tabu = 0
+    eval_ant = 0
+
+    results_tabu = 0
+    results_ant = 0
+
     for i in range(0, times):
         r_ant = ant_colony_optimization(problem)
+        results_ant += r_ant[1]
+        eval_ant += problem.cantEvaluations
+
         r_tabu = tabu_search(problem)
+        results_tabu += r_tabu[1]
+        eval_tabu += problem.cantEvaluations
+
         if r_tabu[1] > r_ant[1]:
             wins_ant += 1
         elif r_tabu[1] == r_ant[1]:
             draw += 1
         else:
             wins_tabu += 1
+
     print("Bochachevsky Tabu %d Ant %d Draw %d" % (wins_tabu, wins_ant, draw))
+    print("Promedio cantidad evaluaciones Tabu: ", eval_tabu / times)
+    print("Promedio cantidad evaluaciones Ant: ", eval_ant / times)
+    print("Promedio resultados Tabu: ", results_tabu / times)
+    print("Promedio resultados Ant: ", results_ant / times)    
+
     wins_tabu = 0
     wins_ant = 0
     draw = 0
+
+    eval_tabu = 0
+    eval_ant = 0
+
+    results_ant = 0
+    results_tabu = 0
+
     problem = test_problems.schwefel(2)
     for i in range(0, times):
         r_ant = ant_colony_optimization(problem)
+        eval_ant += problem.cantEvaluations
+        results_ant += r_ant[1]
+
         r_tabu = tabu_search(problem)
+        eval_tabu += problem.cantEvaluations
+        results_tabu += r_tabu[1]
+
         if r_tabu[1] > r_ant[1]:
             wins_ant += 1
         elif r_tabu[1] == r_ant[1]:
@@ -79,13 +93,31 @@ def simulate(times=10000):
         else:
             wins_tabu += 1
     print("Scwefel Tabu %d Ant %d Draw %d" % (wins_tabu, wins_ant, draw))
+    print("Promedio cantidad evaluaciones Tabu: ", eval_tabu / times)
+    print("Promedio cantidad evaluaciones Ant: ", eval_ant / times)
+    print("Promedio resultados Tabu: ", results_tabu / times)
+    print("Promedio resultados Ant: ", results_ant / times)  
+
     wins_tabu = 0
     wins_ant = 0
     draw = 0
+
+    eval_tabu = 0
+    eval_ant = 0
+
+    results_ant = 0
+    results_tabu = 0
+
     problem = test_problems.traveling_salesman_problem(grafo)
     for i in range(0, times):
         r_ant = ant_colony_optimization(problem, surroundings_function=salesman_surroundings, randomFunction=salesman_random(grafo))
+        eval_ant += problem.cantEvaluations
+        results_ant += r_ant[1]
+
         r_tabu = tabu_search(problem, surroundings_function=salesman_surroundings, randomFuction=salesman_random(grafo))
+        eval_tabu += problem.cantEvaluations
+        results_tabu += r_tabu[1]
+        
         if r_tabu[1] > r_ant[1]:
             wins_ant += 1
         elif r_tabu[1] == r_ant[1]:
@@ -93,5 +125,9 @@ def simulate(times=10000):
         else:
             wins_tabu += 1
     print("Traveling salesman Tabu %d Ant %d Draw %d" % (wins_tabu, wins_ant, draw))
+    print("Promedio cantidad evaluaciones Tabu: ", eval_tabu / times)
+    print("Promedio cantidad evaluaciones Ant: ", eval_ant / times)
+    print("Promedio resultados Tabu: ", results_tabu / times)
+    print("Promedio resultados Ant: ", results_ant / times)
 
-simulate(10000)
+simulate(2)

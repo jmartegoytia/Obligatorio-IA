@@ -54,6 +54,9 @@ def ant_colony_optimization(problem, iterations=10, ants_amount=10,
     global_pheromone_update=global_pheromone_update,
     local_pheromone_function=local_pheromone, pheromene_evaporation = 0.20,
     ant_iterations=100, surroundings_function=surroundings, randomFunction=None):
+
+    problem.restartCantEvaluations()
+    
     j = 0
     pheromones = {}
     best_solution = None
