@@ -25,6 +25,29 @@ def schwefel  (d):
         domains = ((-500,500),) * d,
         objective = _schwefel_)
 
+def traveling_salesman_problem (grafo):
+    return OptimizationProblem(
+        domains = ((0, len(grafo.matriz)) * len(grafo.matriz),),
+        objective = _traveling_salesman_problem_(grafo))
+
+def _traveling_salesman_problem_ (grafo):
+    maxValorArista = 0
+    cantNone = 0
+    suma = 0
+    for i in grafo.matriz:
+        for j in i:
+            if (j is not None and j > maxValorArista):
+                maxValorArista = j
+        cantNone += len(list(filter(None, i)))
+
+    for i in grafo.matriz:
+        for j in i:
+            if (j != None):        # No existe arista que una a los nodos
+                suma += j
+            else:
+                suma += maxValorArista * 2 * cantNone
+
+
 def hello_world(target_str="Hello world!"):
     target_chars = tuple(map(ord, target_str))
     return OptimizationProblem(

@@ -14,6 +14,8 @@ def tabu_search(problem, iterations = 1000, max_size_tabu_list = 100):
     i = 0
 
     currentCandidate = problem.randomElement()
+    print(currentCandidate)
+
     best = problem.objective(currentCandidate)
     currentCandidate = (currentCandidate, best)
 
