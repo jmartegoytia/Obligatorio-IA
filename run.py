@@ -3,6 +3,16 @@ from ant_colony_optimization import ant_colony_optimization
 from grafo import Grafo
 import random
 
+def generateGraph(N):
+    matriz = []
+    elements = list(range(0, N)) + [None]
+    for i in range(0, N):
+        lista = []
+        for j in range(0, N):            
+            lista.append(random.choice(elements))
+        matriz.append(lista)
+    return Grafo(matriz)
+
 def salesman_random(grafo):
     def random_element():
         nodes = list(range(0, len(grafo.matriz)))
@@ -25,10 +35,6 @@ def salesman_surroundings(center, radius, domains):
             if aux not in surroundings:
                 surroundings.append(tuple(aux))
     return surroundings
-None
-
-
-grafo = Grafo([[1,None,None,1],[None,1,None,None],[1,None,1,1],[None,None,1,1]])
 
 def simulate(times=10000):
     #Problem bochachevsky
@@ -108,8 +114,10 @@ def simulate(times=10000):
     results_ant = 0
     results_tabu = 0
 
-    problem = test_problems.traveling_salesman_problem(grafo)
     for i in range(0, times):
+        grafo = generateGraph(20)
+        problem = test_problems.traveling_salesman_problem(grafo)
+
         r_ant = ant_colony_optimization(problem, surroundings_function=salesman_surroundings, randomFunction=salesman_random(grafo))
         eval_ant += problem.cantEvaluations
         results_ant += r_ant[1]
